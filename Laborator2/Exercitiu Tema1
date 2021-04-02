@@ -1,0 +1,47 @@
+#include <iostream>
+#include <conio.h>
+#include <string.h>
+#include <string>
+#define _CRT_SECURE_NO_WARNINGS
+
+
+using namespace std;
+
+class Carte {
+	string titlu, nume_autor, editura;
+	int an_publicatie;
+public:
+	Carte(string, string, string, int);
+	void afisare_date(void);
+};
+
+//Constructor
+Carte::Carte(string t, string num_a, string edit, int an_p){
+	titlu=t;
+	nume_autor=num_a;
+	editura=edit;
+	an_publicatie=an_p;
+}
+
+void Carte::afisare_date() {
+	cout << "TITLU: " << titlu << endl;
+	cout << "NUME AUTOR: " << nume_autor << endl;
+	cout << "EDITURA: " << editura << endl;
+	cout << "ANUL PUBLICARII: " << an_publicatie << endl << endl;
+}
+
+int main() {
+	
+	string t, n_a, e;
+	int a_p;
+	cin >> t;
+	cin >> n_a;
+	cin >> e;
+	cin >> a_p;
+	Carte C1(t, n_a, e, a_p), C2("POO", "MCC", "Politehnica", 2017);
+	C1.afisare_date();
+	C2.afisare_date();
+
+	_getch();
+	return 0;
+}
