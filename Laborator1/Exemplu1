@@ -1,0 +1,22 @@
+#include <iostream>
+#include <conio.h>
+using namespace std;
+int main() {
+
+	int nr;
+	cout << "Valoare nr. intreg:";
+	cin >> nr;
+	int s = 0, p = 1;
+	while (nr != 0) {
+		if (nr % 2 == 0)
+			s = s + nr;
+		else p = p * nr;
+		cout << "Valoare nr. intreg:";
+		cin >> nr;
+	}
+	cout << "Suma numerelor pare este:" << s << endl;
+	cout << "Produsul numerelor impare este:"<<p<< endl;
+	_getch();
+
+	return 0;
+}
