@@ -1,0 +1,271 @@
+#include <iostream>
+#include <conio.h>
+#include <fstream>
+#include <string>
+
+using namespace std;
+
+/*5. Folosind cunoștințeleacumulate până acum să
+se rezolve următoarea problemă: Realizaţi un program
+care să gestioneze următoarele informaţii despre
+electrocasnicele dintrun magazin:
+ Maşină de spălat
+cu următoarele variabile: Producător, Preţ, Nr_programe;
+ Aragaz cu următoarele variabile: Producător, Preţ, Tip arzătoare. 
+Creaţi pe baza informaţiilor furnizate o clasă de bază 
+şi două clase derivate şi implementaţi următoarele funcţii 
+prin intermediul unui meniu interactiv: 
+1. Citirea informațiilor existente în fișier 
+2. Adăugare maşină spălat sau aragaz
+3. Afişare electrocasnice. 
+4. Căutare aragaz după “tip arzătoare”.
+5. Salvare carte de telefoane în fişier 
+6. Ieşire 
+Problema se va rezolva folosind liste eterogene
+și se vor prevedea cel puțin două situații
+de tratare a excepțiilor. */
+
+class Lista;
+class Electrocasnice {
+	int Tip_derivat;
+	string Producator;
+	int Pret;
+	Electrocasnice *urm;
+public:
+	Electrocasnice(int tip, string prod, int pret) {
+		Tip_derivat = tip;
+		Producator = prod;
+		Pret = pret;
+		urm = NULL;
+	}
+	virtual void afisare() {
+		cout << "__________________________________" << endl;
+		cout << "PRODUCATOR:" << Producator << endl;
+		cout << "PRET:" << Pret << endl;
+	}
+
+	friend class Lista;
+	
+};
+
+class Masina_de_spalat :public Electrocasnice {
+	int Nr_programe;
+public:
+	Masina_de_spalat(int tip, string prod, int pret, int nr_prg) :Electrocasnice(tip, prod, pret) {
+		Nr_programe = nr_prg;
+	}
+	void afisare() {
+		Electrocasnice::afisare();
+		cout << "NR. PROGRAME:" << Nr_programe << endl;
+	}
+	friend class Lista;
+};
+
+class Aragaz :public Electrocasnice {
+	string Tip_arzator;
+public:
+		Aragaz(int tip, string prod, int pret, string tip_a) :Electrocasnice(tip, prod, pret) {
+			Tip_arzator = tip_a;
+		}
+	void afisare() {
+		Electrocasnice::afisare();
+		cout << "TIP ARZATOR:" << Tip_arzator << endl;
+	}
+	friend class Lista;
+};
+
+class Lista {
+public:
+	Electrocasnice *head;
+	void adaugare(Electrocasnice *a);
+	void afisare_lista();
+	void cautare_aragaz(int x);
+	void incarcare_fisier();
+};
+
+class MyException {
+public:
+	string str_what;
+	int what;
+	MyException() { str_what = " "; what = 0; }
+	MyException(string s, int c) {
+		str_what = s;
+		what = c;
+	}
+};
+
+void Lista::adaugare(Electrocasnice *a) {
+	Electrocasnice *p;
+	p = head;
+	if (p) {
+		if (a->Producator < p->Producator)
+		{
+			a->urm = head;
+			head = a;
+		}
+		else {
+			while (p->urm&&p->urm->Producator < a->Producator)
+				p = p->urm;
+			a->urm = p->urm;
+			p->urm = a;
+		}
+	}
+	else
+		head = a;
+}
+
+
+void Lista::afisare_lista() {
+	Electrocasnice *a;
+	a = head;
+	if (!a)
+		cout << "Lista vida!\n";
+	else
+		while (a) {
+			a->afisare();
+			a = a->urm;
+		}
+}
+
+void Lista::cautare_aragaz(int x) {
+	Electrocasnice *a;
+	Aragaz *b;
+	string tip_a;
+	cin.get();
+	cout << "Dati tipul arzatorului:"; getline(cin, tip_a);
+
+	a =head;
+	if (!a)
+		cout << "Lista vida!\n";
+	else
+
+		while (a) {
+			if (a->Tip_derivat == 1) {
+					b = (Aragaz*)a;
+					if (b->Tip_arzator == tip_a) 
+					b->afisare();
+					a = a->urm;//
+					//return;
+					/*
+					else
+					{
+						a = a->urm;
+					}*/
+			}
+			else//
+				a = a->urm;//
+		}
+}
+
+void Lista::incarcare_fisier() {
+	Electrocasnice *e = head;
+	Aragaz *a;
+	Masina_de_spalat *m;
+	ofstream fisier;
+	fisier.open("Electrocasnice.txt");
+	if (fisier.is_open())
+	{
+		while (e) {
+			if (e->Tip_derivat == 0)
+			{
+				m = (Masina_de_spalat*)e;
+				fisier << "PRODUCATOR:" << m->Producator << endl;
+				fisier << "PRET:" << m->Pret << endl;
+				fisier << "NR. PROGRAME:" << m->Nr_programe << endl;
+				fisier << endl;
+			}
+			if (e->Tip_derivat == 1)
+			{
+				a = (Aragaz*)e;
+				fisier << "PRODUCATOR:" << a->Producator << endl;
+				fisier << "PRET:" << a->Pret << endl;
+				fisier << "TIP ARZATOR:" << a->Tip_arzator << endl;
+				fisier << endl;
+			}
+			e = e->urm;
+		}
+		fisier.close();
+		cout << "\n\tLISTA A FOST INCARCATA.\n\n";
+	}
+	else
+		cout << "\n\tFISIERUL NU POATE FI DESCHIS!\n\n";
+}
+
+
+void introducere(Lista &l, int x) {
+	string Producator, Tip_arzator;
+	int Tip_derivat, Pret, Nr_programe;
+	Electrocasnice *a;
+	cin.get();
+	cout << "Dati producator:"; getline(cin, Producator);
+	do {
+		try {
+			cout << "Dati pretul:"; cin >> Pret;
+			if (Pret < 0)
+				throw MyException("Pretul nu este pozitiv!", Pret);
+		}
+		catch (MyException e) {
+			cout << e.str_what << ":";
+			cout << e.what << "\n";
+		}
+	} while (Pret < 0);
+	cin.get();
+	if (x == 0) {
+		Masina_de_spalat *M;
+		do {
+			try {
+				cout << "Dati nr. programe:"; cin >> Nr_programe;				if (Pret < 0)
+					throw MyException("Masina trebuie sa aiba cel putin un program!\n", Nr_programe);
+			}
+			catch (MyException e) {
+				cout << e.str_what << ":";
+				cout << e.what << "\n";
+			}
+		} while (Nr_programe < 0);
+		cin.get();
+		M = new Masina_de_spalat(0, Producator, Pret, Nr_programe);
+		a = M;
+		l.adaugare(a);
+	}
+	else if (x == 1) {
+		Aragaz *Ar;
+		cout << "Dati tipul de arzator:"; getline(cin,Tip_arzator);
+		Ar = new Aragaz(1, Producator, Pret, Tip_arzator);
+		a = Ar;
+		l.adaugare(a);
+	}
+}
+
+
+
+int main() {
+	int opt;
+	Lista l;
+	l.head = NULL;
+
+	do {
+		cout << "MENIU:\n";
+		cout << "1.Adaugare masina de spalat.\n";
+		cout << "2.Adaugare aragaz.\n";
+		cout << "3.Afisare produse.\n";
+		cout << "4.Cautare aragaz dupa tipul arzatorului.\n";
+		cout << "0.Iesire.\n";
+		cout << "OPTIUNE:";
+		cin >> opt;
+		switch (opt)
+		{
+		case 1: introducere(l, 0); break;
+		case 2: introducere(l, 1); break;
+		case 3: l.afisare_lista(); break;
+		case 4: l.cautare_aragaz(1); break;
+		case 5: l.incarcare_fisier(); break;
+		case 0: exit(0); break;
+		default:cout << "\n\tOPTIUNE GRESITA !\n\n";
+			break;
+		}
+
+	} while (opt != 0);
+	system("pause");
+	return 0;
+}
+
