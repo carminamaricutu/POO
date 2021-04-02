@@ -1,0 +1,23 @@
+#include <iostream>
+#include <conio.h>
+using namespace std;
+int suma(int a, int b) {
+	return a + b;
+}
+float suma(float a, float b) {
+	return a + b;
+}
+
+int main() {
+
+	int a, b;
+	cout << "Valoarea numarului intreg a este:"; cin >> a;
+	cout << "Valoarea numarului intreg b este:"; cin >> b;
+	cout << "Suma celor 2 nr. intregi este:" << suma(a, b) << endl;
+	float x, y;
+	cout << "Valoarea numarului real x este:"; cin >> x;
+	cout << "Valoarea numarului real y este:"; cin >> y;
+	cout << "Suma celor 2 nr. reale este:" << suma(x, y) << endl;
+	_getch();
+	return 0;
+}
