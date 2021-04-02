@@ -1,0 +1,171 @@
+#include <iostream>
+#include <conio.h>
+#include <string>
+
+using namespace std;
+
+class Lista;
+/*
+ Creioane cu următoarele variabile: Producător, Denumire, Tip mina 
+ Pixuri cu următoarele variabile: Producător, Denumire, Culoare.  
+ */
+
+class Articole_Magazin {
+	int Tip_derivat;
+	string Producator;
+	string Denumire;
+	Articole_Magazin *urm;
+public:
+	Articole_Magazin(int t, string prod, string den) {
+		Tip_derivat = t;
+		Producator = prod;
+		Denumire = den;
+	}
+	virtual void afisare() {
+		cout << "__________________________________" << endl;
+		cout << "PRODUCATOR:" << Producator << endl;
+		cout << "DENUMIRE:" << Denumire << endl;
+	}
+	friend class Lista;
+};
+
+class Creioane :public Articole_Magazin {
+	string Tip_mina;
+public:
+	Creioane(int t, string prod, string den, string tip_m) :Articole_Magazin(t, prod, den) {
+		Tip_mina = tip_m;
+	}
+	void afisare() {
+		Articole_Magazin::afisare();
+		cout<< "TIP MINA:" << Tip_mina << endl;
+	}
+	friend class Lista;
+};
+
+
+class Pixuri :public Articole_Magazin {
+	string Culoare;
+public:
+	Pixuri(int t, string prod, string den, string cul) :Articole_Magazin(t, prod, den) {
+		Culoare = cul;
+	}
+	void afisare() {
+		Articole_Magazin::afisare();
+		cout << "CULOARE:" << Culoare << endl;
+	}
+	friend class Lista;
+};
+
+class Lista {
+public:
+	Articole_Magazin *head;
+	void adaugare(Articole_Magazin *a);
+	void afisare_lista(int x);
+};
+
+
+void Lista::adaugare(Articole_Magazin *a) {
+	Articole_Magazin *p;
+	p = head;
+	if (p){
+		if (a->Producator < p->Producator) {
+			a->urm = head;
+			head = a;
+		}
+		else
+		{
+			while (p->urm&&p->urm->Producator < a->Producator)
+				p = p->urm;
+			a->urm = p->urm;
+			p->urm = a;
+		}
+	}
+	else
+		head = a;
+}
+
+void Lista::afisare_lista(int x) {
+	Articole_Magazin *a;
+	a = head;
+	if (!a)
+		cout << "Lista este vida!\n";
+	else
+		while (a) {
+			if (a->Tip_derivat == x) {
+				a->afisare();
+				a = a->urm;
+			}
+			else
+				a = a->urm;
+		}
+}
+
+class Supraincarcare {
+	string producator, denumire;
+public:
+	friend ostream&operator<<(ostream&out, Supraincarcare &a);
+	friend istream&operator>>(istream&in, Supraincarcare&a);
+	string Producator() { return producator; }
+	string Denumire() { return denumire; }
+};
+
+ostream &operator<<(ostream&out, Supraincarcare &a) {
+	cout << "Se citesc datele pentru creioane si pixuri.\n";
+	cout << endl;
+	return out;
+}
+
+istream &operator>>(istream&in, Supraincarcare &a) {
+	cin.get();
+	cout << "Dati producatorul:"; getline(cin, a.producator);
+	cout << "Dati denumirea:"; getline(cin, a.denumire);
+	return in;
+}
+
+void introducere(Lista &l, int x) {
+	int Tip_derivat;
+	string Producator, Denumire, Culoare, Tip_mina;
+	Articole_Magazin *art_m;
+	Supraincarcare supr;
+	cout << supr;
+	cin >> supr;
+	if (x == 0) {
+		Creioane *creioane;
+		//cin.get();
+		cout << "Dati tipul minei:"; getline(cin, Tip_mina);
+		creioane = new Creioane(0, supr.Producator(), supr.Denumire(), Tip_mina);
+		art_m = creioane;
+		l.adaugare(art_m);
+	}
+	else if (x == 1) {
+		Pixuri *pixuri;
+		//cin.get();
+		cout << "Dati culoarea:"; getline(cin, Culoare);
+		pixuri = new Pixuri(1, supr.Producator(), supr.Denumire(), Culoare);
+		art_m = pixuri;
+		l.adaugare(art_m);
+	}
+}
+
+void main() {
+	int opt;
+	Lista l;
+	l.head = NULL;
+	do {
+		cout << "\n1. Adaugare creioane intr-o lista, ordonat.\n2. Adaugare pixuri intr-o lista, ordonat.\n3. Afisare creioane.\n4. Afisare pixuri.\n5. Iesire\n\n";
+		cout << "Introduceti optiunea:";
+		cin >> opt;
+		switch (opt)
+		{
+		case 1: introducere(l, 0); break;
+		case 2: introducere(l, 1); break;
+		case 3: l.afisare_lista(0); break;
+		case 4: l.afisare_lista(1); break;
+		case 0: exit(0); break;
+		default:"Optiune inexistenta!\n";
+			break;
+		}
+	} while (opt != 0);
+
+	system("pause");
+}
