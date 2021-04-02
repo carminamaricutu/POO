@@ -1,0 +1,77 @@
+#include<iostream>
+#include<conio.h>
+#include <string>
+#include <string.h>
+#define _CTR_SECURE_NO_WARNINGS
+using namespace std;
+class Student
+{ 
+	char nume[20], rol[20], adresa[20];  
+	int cod_postal; 
+public:   
+	Student(char[20], char[20], char[20], int);
+	Student();//Constructor  
+	~Student(); //Destructor  
+	void citire_date();  
+	void afisare_date(); 
+}; 
+//Constructor1
+Student::Student()  
+{  cout << "Constructor1: Informatiile despre student:" << endl; 
+}
+// funcție pentru citirea informațiilor 
+
+void Student:: citire_date()
+{  
+	cout << "Nume:";  
+	cin>>nume ;  
+	cout << "Rol:";  
+	cin >> rol;  
+	cout << "Adresa:";  
+	cin >> adresa;  
+	cout << "Cod postal: "; 
+	cin >> cod_postal; 
+} 
+//Constructor2
+Student::Student(char Nume[20], char Rol[20], char  Adresa[20], int Cod_p) {
+	cout << "Constructor2\n";
+	strcpy(nume, Nume);
+	strcpy(rol, Rol);
+	strcpy(adresa, Adresa);
+	cod_postal = Cod_p;
+}
+//funcție pentru afișarea datelor 
+void Student::afisare_date() 
+{ 
+	cout << "Nume :" << nume << endl; 
+	cout << "Rol:" << rol << endl;  
+	cout << "Adresa:" << adresa << endl; 
+	cout << "Cod postal :" << cod_postal<<endl;
+} 
+//destructor 
+Student :: ~Student()
+{  
+	cout << "Destructor: Eliberare memorie!\n";
+} 
+int main() {
+	//crearea unui obiect de tip Student 
+	Student s1;  
+	char n[20], r[20], a[20];
+	int c_p;
+	cout << "Nume: "; cin >> n;
+	cout << "Rol: "; cin >> r;
+	cout << "Adresa: "; cin >> a;
+	cout << "Cod postal: "; cin >> c_p;
+
+	//citirea informațiilor 
+	s1.citire_date(); 
+	//afișarea informațiilor 
+	s1.afisare_date(); 
+	s1.~Student(); //apelare explicită 
+	
+	Student s2(n, r,a, c_p);
+	s2.afisare_date();
+	s2.~Student();
+	_getch();
+	return 0;
+} 
