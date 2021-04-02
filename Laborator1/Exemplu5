@@ -1,0 +1,15 @@
+#include <iostream>
+using namespace std;
+
+int negativ(int &i) {
+	return -i;
+}
+
+int main() {
+
+	int val;
+	cout << "Dati valoare:"; cin >> val;
+	cout << "Valoarea negativa este:" << negativ(val) << endl;
+	system("pause");
+	return 0;
+}
