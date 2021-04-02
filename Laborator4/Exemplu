@@ -1,0 +1,144 @@
+#include <iostream>
+#include <string>
+#include <conio.h>
+
+using namespace std;
+
+class Carti {
+protected:
+	string autor;
+	string titlu;
+	int imprumutat;
+public:
+	Carti(string a, string t, int i) {
+		autor = a;
+		titlu = t;
+		imprumutat = i;
+	}
+	virtual void display() = 0;
+};
+//Clasa tehnice
+class Tehnice :public Carti {
+	int nr_exemplare;
+	string limba;
+	int an_aparitie;
+	Tehnice *head;
+	Tehnice *next;
+public:
+	Tehnice(string a, string t, int i, int nr, string l, int an) :Carti(a, t, i) {
+
+		head = NULL;
+		nr_exemplare = nr;
+		limba = l;
+		an_aparitie = an;
+	}
+	void display();
+	void adaugare();
+};
+//Clasa literatura
+class Literatura :public Carti {
+	string tip_carte;
+	Literatura *head;
+	Literatura *next;
+public:
+	Literatura(string a, string t, int i, string t_c):Carti(a, t, i) {
+		head = NULL;
+		tip_carte = t_c;
+	}
+	void display();
+	void adaugare();
+};
+
+void Tehnice::adaugare() {
+	int imprumutat, nr_exemplare, an_aparitie;
+	string autor, titlu, limba;
+	cin.get();
+	cout << "Dati autor: "; getline(cin, autor);
+	cout << "Dati titlul: "; getline(cin, titlu);
+	cout << "Dati satrea cartii(1->imprumutat/0->neimprumutat): "; cin >>imprumutat;
+	cout << "Dati nr exemplare: "; cin >> nr_exemplare;
+	cin.get();
+	cout << "Dati limba: "; getline(cin, limba);
+	cout << "Dati an aparitie: "; cin >> an_aparitie;
+
+	Tehnice *p = new Tehnice(autor, titlu, imprumutat, nr_exemplare, limba, an_aparitie);
+	p->next = head;
+	head = p;
+
+}
+
+void Literatura::adaugare() {
+	int imprumutat;
+	string autor, titlu;
+	string tip;
+	cin.get();
+	cout << "Dati autor: "; getline(cin, autor);
+	cout << "Dati titlul: "; getline(cin, titlu);
+	cout << "Dati satrea cartii(1->imprumutat/0->neimprumutat): "; cin>> imprumutat;
+	cin.get();
+	cout << "Dati tipul cartii: "; getline(cin, tip);
+	Literatura *p = new Literatura(autor, titlu, imprumutat, tip);
+	p->next = head;
+	head = p;
+};
+
+void Tehnice::display() {
+	Tehnice *p = head;
+	while (p != NULL) {
+		cout << "_______________________________" << endl;
+		cout << "Autor:" << p->autor << endl;
+		cout << "Titlu:" << p->titlu << endl;
+		cout << "Imprumutat:(DA=1,NU=0):" << p->imprumutat << endl;
+		cout << "Nr. exemplare: " << p->nr_exemplare << endl;
+		cout << "Limba: " << p->limba << endl;
+		cout << "An aparitie:" << p->an_aparitie << endl;
+		cout << "_______________________________" << endl;
+		p = p->next;
+	   	}
+}
+
+void Literatura::display() {
+	Literatura *p = head;
+	while (p != NULL) {
+		cout << "_______________________________" << endl;
+		cout << "Autor:" << p->autor << endl;
+		cout << "Titlu:" << p->titlu << endl;
+		cout << "Imprumutat:(DA=1,NU=0):" << p->imprumutat << endl;
+		cout << "Tip carte:" << p->tip_carte << endl;
+		cout << "_______________________________" << endl;
+		p = p->next;
+
+	}
+}
+
+int main() {
+
+	unsigned int opt;
+	Tehnice *c = new Tehnice("", "", 0, 0, "", 0);
+	Literatura *o = new Literatura("", "", 0, "");
+	do {
+		cout << "1.Adaugare carte tehnica." << endl;
+		cout << "2.Adaugare carte literatura." << endl;
+		cout << "3.afisare carte tehnica." << endl;
+		cout << "4.Afisare carte literatura." << endl;
+		cout << "0.Iesire." << endl;
+		cout << "Optiunea dvs. este:";
+		cin >> opt;
+		switch (opt)
+		{
+		case 1: c->adaugare();
+			break;
+		case 2: o->adaugare();
+			break;
+		case 3: c->display();
+			break;
+		case 4: o->display();
+			break;
+		case 0:
+			exit(0); break;
+		default:cout << "Optiune gresita!\n";
+			break;
+		}
+	} while (opt != 0);
+	return 0;
+}
