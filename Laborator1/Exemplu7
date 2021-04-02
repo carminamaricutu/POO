@@ -1,0 +1,17 @@
+#include <iostream>
+using namespace std;
+inline int minim(int x, int y) {
+	return x < y ? x : y;
+}
+
+int main() {
+	int x, y;
+	cout << "Dati valoarea lui x:";
+	cin >> x;
+	cout << "Dsti valoarea lui y:";
+	cin >> y;
+	cout << "Minimul este:" << minim(x, y) << endl;
+	system("pause");
+
+	return 0;
+}
