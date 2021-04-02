@@ -1,0 +1,80 @@
+#define _CRT_SECURE_NO_WARNINGS
+#include <iostream>
+#include <conio.h>
+
+using namespace std;
+
+class Sofer
+{
+	int varsta;
+	char nume[20], CNP[20], adresa[20];
+public:
+	void citire_campuri(char[20], char[20], int, char[20]);
+	void afisare_campuri();
+};
+
+void Sofer::citire_campuri(char num[20], char cnp[20], int varst, char adres[20])
+{
+	strcpy(nume, num);
+	strcpy(CNP, cnp);
+	varsta = varst;
+	strcpy(adresa, adres);
+}
+
+void Sofer::afisare_campuri() {
+	cout <<"Nume sofer:"<< nume<<endl;
+	cout <<"CNP sofer:"<< CNP<<endl;
+	cout <<"Varsta sofer:"<< varsta<<endl;
+	cout <<"Adresa sofer:"<< adresa<<endl;
+}
+
+class Masina
+{
+	char producator[20], model[20], Sofer[20];
+	int an_fabricatie;
+public:
+	void citire(char[20], char[20], int, char[20]);
+	void afisare();
+};
+
+void Masina::citire(char prod[20], char mod[20], int an_fab, char sofer[20]) {
+	strcpy(producator, prod);
+	strcpy(model, mod);
+	an_fabricatie = an_fab;
+	strcpy(Sofer, sofer);
+
+ }
+
+void Masina::afisare() {
+	cout << "Producator masina:" << producator << endl;
+	cout << "Model masina:" << model << endl;
+	cout << "An fabricatie:" << an_fabricatie << endl;
+	cout << "Sofer:" << Sofer << endl;
+
+}
+
+int main() {
+	Sofer s;
+	Masina m;
+	char Prod[20], Mod[20], sofer[20];
+	int An_fabricatie;
+	int varst;
+	char num[20], cnp[20], adres[20];
+	cout << "Introduceti nume sofer:" << "\t"; cin >> num;
+	cout << "Introduceti CNP sofer:" << "\t"; cin >> cnp;
+	cout << "Introduceti varsta sofer:" << "\t"; cin >> varst;
+	cout << "Introduceti adresa sofer:" << "\t"; cin >> adres;
+
+	s.citire_campuri(num, cnp, varst, adres);
+	s.afisare_campuri();
+
+	cout << "Introduceti nume producator:" << "\t"; cin >> Prod;
+	cout << "Introduceti model masina:" << "\t"; cin >> Mod;
+	cout << "Introduceti an_fabricatie:" << "\t"; cin >> An_fabricatie;
+	cout << "INtroduceti sofer:" << "\t"; cin >> sofer;
+	m.citire(Prod, Mod, An_fabricatie, sofer);
+	m.afisare();
+	_getch();
+
+	return 0;
+}
