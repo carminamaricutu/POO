@@ -1,0 +1,177 @@
+#include <iostream>
+#include <string>
+#include <conio.h>
+
+using namespace std;
+
+class Lista;
+
+class Agentie {
+	int Tip_derivat, Pret, Tenis;
+	string Nume;
+	Agentie *urm;
+public:
+	Agentie(int tip, string nume, int pret, int ten ) {
+		Tip_derivat = tip;
+		Nume = nume;
+		Pret = pret;
+		Tenis = ten;
+		urm = NULL;
+	}
+	virtual void afisare() {
+		cout << "____________________________"<<endl;
+		cout << "NUME:" << Nume << endl;
+		cout << "PRET:" << Pret << endl;
+		cout << "TEREN TENIS:" << Tenis << endl;
+	}
+	friend class Lista;
+};
+
+class Hotel :public Agentie {
+	int Nr_stele, Piscina, Sauna;
+public:
+	Hotel(int tip, string nume, int pret, int ten, int s, int ps, int sn) :Agentie(tip, nume, pret, ten) {
+		Nr_stele = s;
+		Piscina = ps;
+		Sauna = sn;
+	}
+	void afisare() {
+		Agentie::afisare();
+		cout << "NR STELE:" << Nr_stele << endl;
+		cout << "PISCINA:" << Piscina << endl;
+		cout << "SAUNA:" << Sauna << endl;
+	}
+	friend class Lista;
+};
+
+class Pensiune :public Agentie {
+	int Nr_margarete, Gradina;
+public:
+	Pensiune(int tip, string nume, int pret, int ten, int nr_m, int grd) :Agentie(tip, nume, pret, ten) {
+		Nr_margarete = nr_m;
+		Gradina = grd;
+	}
+	void afisare() {
+		Agentie::afisare();
+		cout << "NR MARGARETE:" << Nr_margarete << endl;
+		cout << "GRADINA:" << Gradina << endl;
+	}
+	friend class Lista;
+};
+
+class Lista {
+public:
+	Agentie *head;
+	void adaugare(Agentie *a);
+	void afisare_lista();
+};
+
+class MyException {
+public:
+	string str_what;
+	int what;
+	MyException() {	str_what = " "; what = 0;}
+	MyException(string s, int c) {
+		str_what = s;
+		what = c;
+	}
+};
+
+void Lista::adaugare(Agentie *a) {
+	Agentie *p;
+	p = head;
+	if (p) {
+		if (a->Nume < p->Nume)
+		{
+			a->urm = head;
+			head = a;
+		}
+		else {
+			while (p->urm&&p->urm->Nume < a->Nume)
+				p = p->urm;
+			a->urm = p->urm;
+			p->urm = a;
+		}
+	}
+	else
+		head = a;
+}
+
+
+void Lista::afisare_lista() {
+	Agentie *a;
+	a = head;
+	if (!a)
+		cout << "Lista vida!\n";
+	else
+		while (a) {
+			a->afisare();
+			a = a->urm;
+		}
+}
+
+void introducere(Lista &l, int x) {
+	string Nume;
+	int Pret, Tenis, Nr_stele, Piscina, Sauna, Nr_margarete, Gradina;
+	Agentie *a;
+	cin.get();
+	cout << "Dati numele:"; getline(cin, Nume);
+	do {
+		try {
+			cout << "Dati pretul camerei:"; cin >> Pret;
+			if (Pret < 0)
+				throw MyException("Pretul nu este pozitiv!", Pret);
+		}
+		catch (MyException e) {
+			cout << e.str_what << ":";
+			cout << e.what << "\n";
+		}
+	} while (Pret < 0);
+	cout << "Are teren de tenis?[0/1]:"; cin >> Tenis;
+	if (x == 0) {
+		Hotel *H;
+		cout << "Dati nr stele:"; cin >> Nr_stele;
+		cout << "Are piscina?[0/1]:"; cin >> Piscina;
+		cout << "Are sauna?[0/1]:"; cin >> Sauna;
+		H = new Hotel(1, Nume, Pret, Tenis, Nr_stele, Piscina, Sauna);
+		a = H;
+		l.adaugare(a);
+	}
+	else if (x == 1) {
+		Pensiune *P;
+		cout << "Dati nr margarete:"; cin >> Nr_margarete;
+		cout << "Are gradina?[0/1]:"; cin >> Gradina;
+		P = new Pensiune(2, Nume, Pret, Tenis, Nr_margarete, Gradina);
+		a = P;
+		l.adaugare(a);
+	}
+}
+
+int main() {
+	int opt;
+	Lista l;
+	l.head = NULL;
+
+	do {
+		cout << "MENIU:\n";
+		cout << "1.Adaugare Hotel.\n";
+		cout << "2.Adaugare Pensiune.\n";
+		cout << "3.Afisare oferte.\n";
+		cout << "0.Iesire.\n";
+		cout << "OPTIUNE:";
+		cin >> opt;
+		switch (opt)
+		{
+		case 1: introducere(l, 0); break;
+		case 2: introducere(l, 1); break;
+		case 3: l.afisare_lista(); break;
+		case 0: exit(0); break;
+		default:cout << "OPTIUNE GRESITA !\n";
+			break;
+		}
+
+	} while (opt != 0);
+	system("pause");
+	return 0;
+}
+
