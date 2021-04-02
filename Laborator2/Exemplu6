@@ -1,0 +1,36 @@
+#include <iostream>
+#include <conio.h>
+using namespace std;
+class Dreptunghi {
+	int latime, lungime;
+public:
+	Dreptunghi();
+	Dreptunghi(int, int);
+	int aria(void) {
+		return (latime * lungime);
+	}
+};
+
+Dreptunghi::Dreptunghi() {
+	latime = 5;
+	lungime = 5;
+}
+
+Dreptunghi::Dreptunghi(int a, int b) {
+	
+	latime = a;
+	lungime = b;
+
+}
+
+int main() {
+	Dreptunghi dreptA(2, 3);
+	Dreptunghi dreptB;
+
+	cout << "Arie dreptunghi A: " << dreptA.aria() << endl;
+	cout << "Arie dreptunghi B: " << dreptB.aria() << endl;
+	
+	_getch();
+	return 0;
+
+}
