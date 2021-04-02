@@ -1,0 +1,350 @@
+#include <iostream>
+#include <string>
+#include <conio.h>
+
+using namespace std;
+
+//Clasa de baza
+class Monitoare {
+protected:
+	string Producator;
+	float Diagonala, Pret;
+public:
+	Monitoare(string prod, float diag, float pret) {
+		Monitoare::Producator = prod;
+		Monitoare::Diagonala = diag;
+		Monitoare::Pret = pret;
+	}
+	virtual void afisare() = 0;
+};
+
+//Subclasa monitoare LCD
+class LCD_M :public Monitoare{
+	unsigned int Timp_raspuns;
+	string Tip_ecran, Conectori;
+	LCD_M *head;
+	LCD_M *next;
+public:
+	LCD_M(string prod, float diag, float pret, unsigned int t_rasp, string tip_e, string conectori):Monitoare( prod, diag, pret) {
+		head = NULL;
+		LCD_M::Timp_raspuns = t_rasp;
+		LCD_M::Tip_ecran = tip_e;
+		LCD_M::Conectori = conectori;
+	}
+	void afisare();
+	void adaugare_ordonata();
+	void cautare();
+	void stergere();
+};
+
+//Subclasa monitoare LED
+class LED_M :public Monitoare {
+	string Format_ecran, Iluminare, Boxe_integrate;
+	LED_M *head;
+	LED_M *next;
+public:
+	LED_M(string prod, float diag, float pret, string form_ecran, string iluminare, string  boxe_i) :Monitoare(prod, diag, pret) {
+		head = NULL;
+		LED_M::Format_ecran =form_ecran;
+		LED_M::Iluminare = iluminare ;
+		LED_M::Boxe_integrate = boxe_i;
+	}
+	void afisare();
+	void adaugare_ordonata();
+	void cautare();
+	void stergere();
+};
+
+//Adaugare ordonata monitoare LCD
+void LCD_M::adaugare_ordonata() {
+	string producator;
+	float diagonala, pret;
+	unsigned int timp_raspuns;
+	string tip_ecran, conectori;
+	cout << "Dati producator:"; getline(cin, producator);
+	cout << "Dati diaginala:"; cin >> diagonala;
+	cin.get();
+	cout << "Dati pret:"; cin >> pret;
+	cin.get();
+	cout << "Timp de raspuns:"; cin >> timp_raspuns;
+	cin.get();
+	cout << "Dati tip ecran:"; getline(cin, tip_ecran);
+	cout << "Dati conectori:"; getline(cin, conectori);
+	
+	LCD_M *q1;
+	LCD_M *p = new LCD_M(producator, diagonala, pret, timp_raspuns, tip_ecran, conectori);
+	p->next =head;
+	if (head == NULL || p->Pret < head->Pret) {
+		p->next = head;
+		head = p;
+	}
+	else {
+		if (head->Pret > p->Pret) {
+			p->next = head;
+		}
+		else
+		{
+			q1 = head;
+			while (q1->next != NULL && q1->next->Pret < p->Pret)
+				q1 = q1->next;
+			p->next = q1->next;/*inserare pe parcurs sau la sfarsit*/
+			q1->next = p;
+		}
+	}
+	cout << "\n";
+}
+
+
+//Adaugare ordonata monitoare LED
+void LED_M::adaugare_ordonata() {
+	string producator;
+	float diagonala, pret;
+	string format_ecran, iluminare, boxe_integrate;
+	cout << "Dati producator:"; getline(cin, producator);
+	cout << "Dati diaginala:"; cin >> diagonala;
+	cin.get();
+	cout << "Dati pret:"; cin >> pret;
+	cin.get();
+	cout << "Dati format ecran:"; getline(cin, format_ecran);
+	cout << "Dati iluminare:"; getline(cin, iluminare);
+	cout << "Dati boxe integrate:"; getline(cin, boxe_integrate);
+
+	LED_M *q1;
+	LED_M *p = new LED_M(producator, diagonala, pret, format_ecran, iluminare, boxe_integrate);
+	p->next = head;
+	if (head == NULL || p->Pret < head->Pret) {
+		p->next = head;
+		head = p;
+	}
+	else {
+		if (head->Pret > p->Pret) {
+			p->next = head;
+		}
+		else
+		{
+			q1 = head;
+			while (q1->next != NULL && q1->next->Pret < p->Pret)
+				q1 = q1->next;
+			p->next = q1->next;
+			q1->next = p;
+		}
+	}
+	cout << "\n";
+}
+
+//Afisare monitoare LCD
+void LCD_M::afisare() {
+	LCD_M *p = head;
+	while (p != NULL) {
+		cout << "___________________________" << endl;
+		cout << "PRODUCATOR: " << p->Producator << endl;
+		cout << "DIAGONALA: " << p->Diagonala << endl;
+		cout << "PRET: " << p->Pret << endl;
+		cout <<"TIMP DE RASPUNS: " << p->Timp_raspuns << endl;
+		cout << "TIP ECRAN: " << p->Tip_ecran << endl;
+		cout << "CONECTORI: " << p->Conectori << endl;
+		cout << "___________________________" << endl;
+		p = p->next;
+	}
+}
+
+//Afisare monitoare LED
+void LED_M::afisare() {
+	LED_M *p = head;
+	while (p != NULL) {
+		cout << "___________________________" << endl;
+		cout << "PRODUCATOR: " << p->Producator << endl;
+		cout << "DIAGONALA: " << p->Diagonala << endl;
+		cout << "PRET: " << p->Pret << endl;
+		cout << "FORMAT ECRAN: " << p->Format_ecran << endl;
+		cout << "ILUMINARE: " << p->Iluminare << endl;
+		cout << "BOXE INTEGRATE: " << p->Boxe_integrate << endl;
+		cout << "___________________________" << endl;
+		p = p->next;
+	}
+}
+
+//Cautare monitoare LCD in functie de producator
+void LCD_M::cautare() {
+	LCD_M *p = head;
+	string cautare_producator;
+	int g = 0;
+	cout << "Introduceti producatorul cautat:";
+	getline(cin, cautare_producator);
+	while (p->next != NULL) {
+		if (p->Producator == cautare_producator) {
+			cout << "___________________________" << endl;
+			cout << "PRODUCATOR: " << p->Producator << endl;
+			cout << "DIAGONALA: " << p->Diagonala << endl;
+			cout << "PRET: " << p->Pret << endl;
+			cout << "TIMP DE RASPUNS: " << p->Timp_raspuns << endl;
+			cout << "TIP ECRAN: " << p->Tip_ecran << endl;
+			cout << "CONECTORI: " << p->Conectori << endl;
+			cout << "___________________________" << endl;
+			g++;
+		}
+		p = p->next;
+	}
+	if (g == 0) {
+		cout << "Producatorul cautat nu a fost gasit.\n";
+	}
+}
+
+//Cautare monitoare LED in functie de producator
+void LED_M::cautare() {
+	LED_M *p = head;
+	string cautare_producator;
+	int g=0;
+	cout << "Introduceti producatorul cautat:";
+	getline(cin, cautare_producator);
+	while (p->next != NULL) {
+		if (p->Producator == cautare_producator) {
+			cout << "___________________________" << endl;
+			cout << "PRODUCATOR: " << p->Producator << endl;
+			cout << "DIAGONALA: " << p->Diagonala << endl;
+			cout << "PRET: " << p->Pret << endl;
+			cout << "FORMAT ECRAN: " << p->Format_ecran << endl;
+			cout << "ILUMINARE: " << p->Iluminare << endl;
+			cout << "BOXE INTEGRATE: " << p->Boxe_integrate << endl;
+			cout << "___________________________" << endl;
+			g++;
+		}
+		p = p->next;
+	}
+	if (g == 0) {
+		cout << "Producatorul cautat nu a fost gasit.\n";
+	}
+
+}
+
+//Stergere monitoare LCD in functie de producator
+void LCD_M::stergere() {
+	LCD_M *m = head, *q, *p;
+	string producator_de_sters;
+	cout << "Introduceti producatorul de sters:";
+	getline(cin, producator_de_sters);
+	if (m->Producator == producator_de_sters) {
+		p = m;
+		m = m->next;
+		free(p);
+	}
+	else {
+		q = m;
+		while (q->next != NULL && q->next->Producator != producator_de_sters)
+			q = q->next;
+		if (q->next->Producator == producator_de_sters) {
+			p = q->next;
+			q->next = q->next->next;
+			free(p);
+		}
+	}
+}
+
+//Stergere monitoare LED in functie de producator
+void LED_M::stergere() {
+	LED_M *m = head, *q, *p;
+	string producator_de_sters;
+	cout << "Introduceti producatorul de sters:";
+	getline(cin, producator_de_sters);
+	if (m->Producator == producator_de_sters) {
+		p = m;
+		m = m->next;
+		free(p);
+	}
+	else {
+		q = m;
+		while (q->next != NULL && q->next->Producator != producator_de_sters)
+			q = q->next;
+		if (q->next->Producator == producator_de_sters) {
+			p = q->next;
+			q->next = q->next->next;
+			free(p);
+		}
+	}
+}
+
+
+int main() {
+	unsigned int opt;
+	int tip_monitor;
+	LCD_M *lcd = new LCD_M("", 0, 0, 0, "", "");
+	LED_M *led = new LED_M("", 0, 0, "", "", "");
+	do {
+		cout << "1. Adaugare monitor(LED/LCD).\n";
+		cout << "2. Afisare monitoare(LED/LCD).\n";
+		cout << "3. Stergere monitor(LED/LCD).\n";
+		cout << "4. Cautare monitor(LED/LCD).\n";
+		cout << "5. Ordonare monitoare(LED/LCD) in functie de pret.\n";
+		cout << "6. Iesire.\n";
+		cout << "\nIntroduceti optiunea dorita.\t";
+		cin >> opt;
+		cout << endl;
+		switch (opt)
+		{
+
+		case 1: cout << "Tip monitor:(LED=1/LCD=0).\t";
+			cin >> tip_monitor;
+			cin.get();
+			if (tip_monitor == 1) {
+				led->adaugare_ordonata();
+			}
+			else if (tip_monitor==0)
+			{
+				lcd->adaugare_ordonata();
+			}
+			break;
+		case 2: cout << "Tip monitor:(LED=1/LCD=0).\t";
+			cin >> tip_monitor;
+			if (tip_monitor == 1) {
+				led->afisare();
+			}
+			else if (tip_monitor == 0)
+			{
+				lcd->afisare();
+			}
+			break;
+		
+		case 3:  cout << "Tip monitor:(LED=1/LCD=0).\t";
+			cin >> tip_monitor;
+			cin.get();
+			if (tip_monitor == 1) {
+				led->stergere();
+				led->afisare();
+			}
+			else if (tip_monitor == 0)
+			{
+				lcd->stergere();
+				lcd->adaugare_ordonata();
+			}
+			break;
+		case 4:  cout << "Tip monitor:(LED=1/LCD=0).\t";
+			cin >> tip_monitor;
+			cin.get();
+			if (tip_monitor == 1) {
+				led->cautare();
+			}
+			else if (tip_monitor == 0)
+			{
+				lcd->cautare();
+			}
+			break;
+		case 5: cout << "Tip monitor:(LED=1/LCD=0).\t";
+			cin >> tip_monitor;
+			cin.get();
+			if (tip_monitor == 1) {
+				led->adaugare_ordonata();
+			}
+			else if (tip_monitor == 0)
+			{
+				lcd->adaugare_ordonata();
+			}
+			break;
+		case 6: exit(0); break;
+		default: printf("OPTINUE INVALIDA!\n");
+			break;
+		}
+	} while (opt != 0);
+
+	system("pause");
+	return 0;
+}
