@@ -1,0 +1,33 @@
+#include <iostream>
+#include <conio.h>
+
+using namespace std;
+
+class Dreptunghi {
+	int lungime, latime;
+public:
+	void setare_valori(int, int);
+	int aria();
+};
+
+void Dreptunghi:: setare_valori(int a, int b) {
+	lungime = a;
+	latime = b;
+
+}
+
+int Dreptunghi::aria() {
+	return(lungime*latime);
+}
+
+int main() {
+	Dreptunghi d;
+	int a, b;
+	cout << "a="; cin >> a;
+	cout << "b="; cin >> b;
+	d.setare_valori(a, b);
+	cout << "Aria este:" << d.aria()<<endl;
+	system("pause");
+
+	return 0;
+}
