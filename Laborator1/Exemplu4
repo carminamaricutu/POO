@@ -1,0 +1,23 @@
+#include <iostream>
+using namespace std;
+
+typedef struct {
+	char marca[20];
+	char model[30];
+	float consum, pret;
+}masina;
+
+int main() {
+	masina *ma;
+	ma = new masina;
+	cout << "Introduceti marca masinii:"; cin >> ma->marca;
+	cout << "Introduceti modelul masinii:"; cin >> ma->model;
+	cout << "Introduceti cinsumulde combustibil:"; cin >> ma->consum;
+	cout << "Introduceti pretul masinii:"; cin >> ma->pret;
+
+	cout << "MARCA:" << ma->marca<<endl << "MODEL:" << ma->model << endl << "CONSUM:" << ma->consum << endl << "PRET:" << ma->pret<<endl<<endl;
+	delete ma;
+	system("pause");
+	return 0;
+
+}
