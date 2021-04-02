@@ -1,0 +1,248 @@
+#include <iostream>
+#include <string>
+#include <fstream>
+#include <conio.h>
+
+using namespace std;
+
+/*3. După exemplul prezentat anterior să se realizeze programul următor: 
+Realizaţi un program care să gestioneze următoarele informaţii despre articolele dintr-un magazin: 
+ Telefon Fix cu următoarele variable: Producător, Culoare, Dimensiune 
+ Telefon Mobil cu următoarele variabile: Producător, Culoare, Sistem operare.
+Creaţi din informaţiile date o clasă de bază şi două clase derivate şi implementaţi
+următoarele funcţii prin intermediul unui meniu interactive, cu liste simplu înlănţuite: 
+1. Adăugare telefon fix în spatele listei.
+2. Adăugare telefon mobil în spatele listei. 
+3. Afişare telefoane. 
+4. Căutare telefoane mobile  după “Sistem operare”.
+5. Ieşire
+Aplicaţia va fi implementată folosind clase tipar și fișiere. */
+
+class Magazin;
+class Telefon_fix;
+class Telefon_mobil;
+//clasa lista
+template <class T> class lista
+{
+	T *rad;
+	T *point;
+public:
+	lista();
+	~lista();
+	void adaugare(T *q);
+	T* cautare(string nume);
+	int stergere(string nume);
+	//returneaza primul nod
+	T* prim()
+	{
+		point = rad;
+		return point;
+	}
+	//returneaza urmatorul nod
+	T* next()
+	{
+		if (point != NULL)
+			point = point->urm;
+		return point;
+	}
+	//returneaza daca un nod este vid sau nu
+	int vid()
+	{
+		if (rad == NULL)
+			return 1;
+		else
+			return 0;
+	}
+	void elibereaza();
+	void afisare();
+};
+//se initializeaza radacina cu NULL
+template <class T> lista<T>::lista()
+{
+	rad = NULL;
+}
+
+//stergere lista
+template <class T> void lista<T>::elibereaza()
+{
+	T *p, *q;
+	for (p = rad; p != NULL; p = q)
+	{
+		//se inainteaza in lista si se sterg nodurile
+		q = p->urm;
+		delete p;
+	}
+	//radacina devine null
+	rad = NULL;
+}
+
+//destructorul care sterge lista
+template <class T> lista<T>::~lista()
+{
+	elibereaza();
+}
+
+//adaugare nod in lista
+template <class T> void lista<T>::adaugare(T *q)
+{
+	T *p;
+	//daca lista e nula se adauga primul nod
+	if (rad == NULL) {
+		rad = q;
+		return;
+	}
+	//se adauga ordonat in lista nodurile urmatoare
+	for (p = rad; p->urm != NULL; p = p->urm)
+		if (p->urm->nume > q->nume)
+			break;
+	q->urm = p->urm;
+	p->urm = q;
+}
+
+//stergere element in lista
+template <class T> int lista<T>::stergere(string aux)
+{
+	T *p, *q;
+	//daca nu sunt elemente in lista
+	if (rad == NULL)
+		return 0;
+	//daca se sterge primul nod
+	if (rad->nume == aux)
+	{
+		q = rad;
+		rad = rad->urm;
+		delete q;
+		return 1;
+	}
+	//daca se sterge nod in interiorul listei
+	for (p = rad; p->urm != NULL; p = p->urm)
+		if (p->urm->nume == aux)
+		{
+			q = p->urm;
+			p->urm = p->urm->urm;
+			delete q;
+			return 1;
+		}
+	return 0;
+}
+
+//cautare nod in lista
+template <class T> T* lista<T>::cautare(string aux)
+{
+	T *p;
+	for (p = rad; p != NULL; p = p->urm)
+		if (p->nume == aux)
+			return p;
+	return NULL;
+}
+
+//afisare lista
+template <class T> void lista<T>::afisare()
+{
+	T *p;
+	for (p = rad; p != NULL; p = p->urm)
+		p->afisare();
+}
+
+void MENIU() {
+	cout << "1. Adăugare telefon fix în spatele listei.\n2. Adăugare telefon mobil în spatele listei.\n3. Afişare telefoane.\n4. Căutare telefoane mobile  după 'Sistem operare'.\n0. Ieşire";
+	cout << "Introduceti optiunea:";
+}
+
+
+class Magazin {
+	string Producator, Culoare;
+	int Tip_derivat;
+	lista<Telefon_fix> tel_fix;
+	lista<Telefon_mobil> tel_mob;
+public:
+	Magazin(int tip_d, string prod, string cul) {
+		Tip_derivat = tip_d;
+		Producator = prod;
+		Culoare = cul;
+	}
+	void adaugareFix(Telefon_fix *aux) {
+		tel_fix.adaugare(aux);
+	}
+	void adaugareMobil(Telefon_mobil *aux) {
+		tel_mob.adaugare(aux);
+	}
+	string getProducator() { return Producator; }
+	string getCuloare() { return Culoare; }
+	Telefon_fix*primtelefonFix() {
+		return tel_fix.prim();
+	}
+	Telefon_mobil*primtelefonMobil() {
+		return tel_mob.prim();
+	}
+	Telefon_fix*nexttelefonFix() {
+		return tel_fix.next;
+	}
+	Telefon_mobil*urmtelefonMob() {
+		return tel_mob.next;
+	}
+	virtual void afisare() {
+		cout << "__________________________" << endl;
+		cout << "PRODUCATOR:" << Producator << endl;
+		cout << "CULOARE:" << Culoare << endl;
+	}
+};
+
+class Telefon_fix:public Magazin {
+	string Dimensiune;
+	Telefon_fix *next;
+public:
+	Telefon_fix(int tip_d, string prod, string cul, string dimens):Magazin(tip_d, prod, cul) {
+		Dimensiune = dimens;
+		next = NULL;
+	}
+	~Telefon_fix() {
+		delete &Dimensiune;
+	}
+	void afisare() {
+		Magazin::afisare();
+		cout << "DIMENSIUNE:" << Dimensiune << endl;
+	}
+	string getDimensiune() { return Dimensiune; }
+	friend class lista<Telefon_fix>;
+};
+class Telefon_mobil :public Magazin{
+	string Sistem_de_operare;
+	Telefon_mobil *urm;
+public:
+	Telefon_mobil(int tip_d, string prod, string cul, string sistem) :Magazin(tip_d, prod, cul) {
+		Sistem_de_operare =sistem;
+		urm = NULL;
+	}
+	~Telefon_mobil() {
+		delete &Sistem_de_operare;
+	}
+	void afisare() {
+		Magazin::afisare();
+		cout << "DIMENSIUNE:" << Sistem_de_operare << endl;
+	}
+	string getSistem_operare() { return Sistem_de_operare; }
+	friend class lista<Telefon_mobil>;
+};
+
+
+int main() {
+	int opt;
+	Telefon_fix *f = NULL;
+	Telefon_mobil *m = NULL;
+	Magazin *magazin;
+	do
+	{
+		MENIU(); cin >> opt;
+		switch (opt)
+		{
+		case 1:
+		default: cout << "\n\tOPTIUNEA NU EXISTA!\n\n";
+			break;
+		}
+
+	} while (opt!=0);
+
+	system("pause");
+	return 0;
+}
