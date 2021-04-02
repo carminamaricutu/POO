@@ -1,0 +1,179 @@
+#include <iostream>
+#include <string>
+#include <conio.h>
+
+using namespace std;
+
+class Lista;
+class Articole_magazin {
+	int Tip_derivat;
+	string Producator;
+	int Rezolutie, Pret;
+	Articole_magazin *urm;
+public:
+	Articole_magazin(int t, string prod, int pret,int rez) {
+		Tip_derivat = t;
+		Producator = prod;
+		Pret = pret;
+		Rezolutie = rez;
+		urm = NULL;
+	}
+	virtual void afisare() {
+		cout << "_____________________________" << endl;
+		cout << "PRODUCATOR:" << Producator << endl;
+		cout << "PRET:" <<Pret  << endl;
+		cout << "REZOLUTIE:" << Rezolutie << endl;
+	}
+
+	friend class Lista;
+};
+
+class Rama_Foto :public Articole_magazin {
+	string Format_Afisare;
+	int Diagonala;
+public:
+	Rama_Foto(int t, string prod, int pret, int rez, string format, int diag):Articole_magazin(t, prod, pret, rez)
+	{
+		Format_Afisare = format;
+		Diagonala = diag;
+	}
+	void afisare() {
+		Articole_magazin::afisare();
+		cout << "FORMAT AFISARE:" << Format_Afisare << endl;
+		cout << "DIAGONALA:" << Diagonala << endl;
+	}
+	friend class Lista;
+};
+
+class Aparat_Foto :public Articole_magazin {
+	string Tip_Aparat;
+	string Tip_Senzor;
+public:
+	Aparat_Foto(int t, string prod, int pret, int rez, string aparat, string senzor):Articole_magazin(t, prod, pret, rez)
+	{
+		Tip_Aparat = aparat;
+		Tip_Senzor = senzor;
+	}
+	void afisare() {
+		Articole_magazin::afisare();
+		cout << "TIP APARAT:" << Tip_Aparat << endl;
+		cout << "TIP SENZOR:" << Tip_Senzor << endl;
+	}
+	friend class Lista;
+};
+
+class Lista {
+public:
+	Articole_magazin *head;
+	void adaugare(Articole_magazin *art);
+	void afisare_lista(int tip);
+};
+void Lista::adaugare(Articole_magazin *a) {
+	Articole_magazin *p;
+	p = head;
+	if (p) {
+		if (a->Producator< p->Producator) {
+			a->urm = head;
+			head = a;
+		}
+		else
+		{
+			while (p->urm && (p->urm)->Producator == a->Producator)
+				p = p->urm;
+			a->urm = p->urm;
+			p->urm = a;
+		}
+	}
+	else
+		head = a;
+}
+
+void Lista::afisare_lista(int tip) {
+	Articole_magazin *a;
+	a = head;
+	if (!a)
+		cout << "Lista este vida!" << endl;
+	else
+	{
+		while (a) {
+			if (a->Tip_derivat == tip) {
+				a->afisare();
+				a = a->urm;
+			}
+			else
+				a = a->urm;
+		}
+		
+	}
+}
+
+
+
+void introducere(Lista &l, int x) {
+
+	int Tip_derivat;
+	string Prod;
+	int Pr, Rez, Diag;
+	string Format, T_aparat, T_senzor;
+	Articole_magazin *Articole;
+	cin.get();
+
+	cout << "Introduceti producator:"; getline(cin, Prod);
+	cout << "Introduceti pret produs:"; cin >> Pr;
+	cin.get();
+	cout << "Introduceti Rezolutia:"; cin >> Rez;
+
+	//cin.get();
+
+	if (x == 0) {
+		Rama_Foto *RF;
+		cin.get();
+
+		cout << "Introduceti formatul afisarii:"; getline(cin, Format);
+		cout << "Introduceti diagonala:"; cin >> Diag;
+		
+		RF = new Rama_Foto(0, Prod, Pr,Rez, Format, Diag);
+		Articole = RF;
+		l.adaugare(Articole);
+	}
+	else if (x == 1) {
+		Aparat_Foto *AF;
+		cin.get();
+
+		cout << "Introduceti tipul aparatului:"; getline(cin,T_aparat);
+		cout << "Introduceti tipul senzorului:"; getline(cin, T_senzor);
+		AF = new Aparat_Foto(1, Prod, Pr, Rez, T_aparat, T_senzor);
+		Articole = AF;
+		l.adaugare(Articole);
+	}
+}
+
+
+int main() {
+
+	int opt;
+	Lista l;
+	l.head = NULL;
+
+	do {
+		cout << "1. Adaugare rama foto ordonat.\n";
+		cout << "2. Adaugare aparat foto ordonat.\n";
+		cout << "3. Afisare rame foto.\n";
+		cout << "4. Afisare aparat foto.\n";
+		cout << "0.Iesire.\n";
+		cout << "Introduceti optiunea:"; cin >> opt;
+		switch (opt) {
+		case 1: introducere(l, 0);
+			break;
+		case 2: introducere(l, 1);
+			break;
+		case 3: l.afisare_lista(0); break;
+		case 4:l.afisare_lista(1); break;
+		case 0: break;
+		default:cout << "OPTIUNE GRESITA!\n"; break;
+		}
+	} while (opt != 0);
+
+	system("pause");
+	return 0;
+}
