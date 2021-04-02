@@ -1,0 +1,440 @@
+#include <iostream>
+#include <conio.h>
+#include <string>
+
+using namespace std;
+
+class Persoana {
+	string nume, prenume;
+	unsigned int varsta;
+public:
+	Persoana() {}
+	Persoana(string nume, string prenume, unsigned int varsta) {
+		Persoana::nume = nume;
+		Persoana::prenume = prenume;
+		Persoana::varsta = varsta;
+	}
+	void afisare() {
+		cout << "---------------------------------" << endl;
+		cout << "NUMELE:" << nume << endl;
+		cout << "PRENUME:" << prenume << endl;
+		cout << "VARSTA:" << varsta << endl;
+
+	}
+	string returnareNume() {
+		return Persoana::nume;
+	}
+	string returnarePrenume() {
+		return Persoana::prenume;
+	}
+};
+//CLASA ANGAJAT
+class Angajat :public Persoana {
+	unsigned int salar;
+	string departament;
+public:
+	Angajat() {};
+	Angajat(string nume, string prenume, unsigned int varsta, string departament, unsigned int salar) :Persoana(nume, prenume, varsta) {
+		Angajat::departament = departament;
+		Angajat::salar = salar;
+	}
+	void afisare() {
+		Persoana::afisare();
+		cout << "DEPARTAMENT: " << Angajat::departament << endl;
+		cout << "SALAR: " << Angajat::salar << endl;
+		//cout << "---------------------------------" << endl;
+	}
+};
+
+//CLASA STUDENT
+class Student : public Persoana {
+	string facultatea;
+public:
+	Student() {};
+	Student(string nume, string prenume, unsigned int varsta, string facultatea):Persoana(nume, prenume, varsta)
+	{
+		Student::facultatea = facultatea;
+	}
+	void afisare() {
+		Persoana::afisare();
+		cout << "FACULTATEA: " << Student::facultatea << endl;
+		//cout << "---------------------------------" << endl;
+
+	}
+};
+
+//CLASA STUDENT LICENTA
+class S_Licenta : public Student{
+	unsigned int anul;
+public:
+	S_Licenta() {};
+	S_Licenta(string nume, string prenume, unsigned int varsta, string facultatea, unsigned int anul):Student(nume, prenume, varsta, facultatea){
+		S_Licenta::anul = anul;
+	}
+	void afisare() {
+		Student::afisare();
+		cout << "ANUL DE LICENA: " << S_Licenta::anul << endl;
+	}
+
+};
+//CLASA STUDENT MASTER
+class S_Master : public Student {
+	unsigned int anul;
+public:
+	S_Master() {};
+	S_Master(string nume, string prenume, unsigned int varsta, string facultatea, unsigned int anul) :Student(nume, prenume, varsta, facultatea) {
+		S_Master::anul = anul;
+	}
+	void afisare() {
+		Student::afisare();
+		cout << "ANUL DE MASTER: " << S_Master::anul << endl;
+	}
+};
+
+//CLASA STUDENT DOCTORAT
+class S_Doctorat : public Student {
+	unsigned int anul;
+public:
+	S_Doctorat() {};
+	S_Doctorat(string nume, string prenume, unsigned int varsta, string facultatea, unsigned int anul) :Student(nume, prenume, varsta, facultatea) {
+		S_Doctorat::anul = anul;
+	}
+	void afisare() {
+		Student::afisare();
+		cout << "ANUL: " << S_Doctorat::anul << endl;
+	}
+
+};
+
+//CLASA PROFESOR
+class A_Profesor :public Angajat {
+	string disciplina;
+public:
+	A_Profesor() {};
+	A_Profesor(string nume, string prenume, unsigned int varsta, string departament, unsigned int salar, string disciplina) :Angajat(nume, prenume, varsta, departament,salar) 
+	{
+		A_Profesor::disciplina = disciplina;
+	}
+	void afisare() {
+		Angajat::afisare();
+		cout << "DISCIPLINA PREDATA: " << A_Profesor::disciplina << endl;
+	}
+};
+//CLASA INGINER
+class A_Inginer :public Angajat {
+	string angajator;
+public:
+	A_Inginer() {};
+	A_Inginer(string nume, string prenume, unsigned int varsta, string departament, unsigned int salar, string angajator) :Angajat(nume, prenume, varsta, departament, salar)
+	{
+		A_Inginer::angajator = angajator;
+	}
+	void afisare() {
+		Angajat::afisare();
+		cout << "ANGAJATOR: " << A_Inginer::angajator << endl;
+	}
+};
+
+int main() {
+	//Declarare variabile inginer
+	string n_i,p_i, d_i,a_i;
+	string num_i, pren_i;
+	int v_i, s_i;
+	//Feclarare variabile profesor
+	string n_p, p_p, d_p, dis_p;
+	string num_p, pren_p;
+	int v_p, s_p;
+	//Declarare variabile student licenta
+	string n_s_l, p_s_l, f_l;
+	string num_s_l, pren_s_l;
+	int v_s_l, a_s_l;
+	//Declarare variabile student master
+	string n_s_m, p_s_m, f_m;
+	string num_s_m, pren_s_m;
+	int  v_s_m, a_s_m;
+	//Declarare variabile student doctorat
+	string n_s_d, p_s_d, f_d;
+	string num_s_d, pren_s_d;
+	int v_s_d, a_s_d;
+
+	int  ok = 0, ok2;
+
+	//Declarare matrice de obiecte
+	A_Inginer ingineri[5];
+	A_Profesor profesori[5];
+	S_Licenta licenta[5];
+	S_Master master[5];
+	S_Doctorat doctorat[5];
+
+	unsigned int nr;
+	int opt;
+	
+	do {
+		//Meniu interactiv cu 4 operatiuni:citire, afisare, cautare, stergere pentru fiecare dintre subclasele create.
+
+		cout << "1.Introducere ingineri.\n";
+		cout << "2.Afisare ingineri.\n";
+		cout << "3.Cautare ingineri.\n";
+		cout << "4.Stergere ingineri.\n";
+		cout << "5.Introducere profesori.\n";
+		cout << "6.Afisare profesori.\n";
+		cout << "7.Cautare profesori.\n";
+		cout << "8.Stergere profesori.\n";
+		cout << "9.Introducere studenti licenta.\n";
+		cout << "10.Afisare studenti licenta.\n";
+		cout << "11.Cautare studenti licenta.\n";
+		cout << "12.Stergere studenti licenta.\n";
+		cout << "13.Introducere studenti master.\n";
+		cout << "14.Afisare studenti master.\n";
+		cout << "15.Cautare studenti master.\n";
+		cout << "16.Stergere studenti master.\n";
+		cout << "17.Introducere studenti doctorat.\n";
+		cout << "18.Afisare studenti doctorat.\n";
+		cout << "19.Cautare studenti doctorat.\n";
+		cout << "20.Stergere studenti doctorat.\n";	
+		cout << "0.Iesire.\n";
+		cout << "Optiunea dorita:"; cin >> opt;
+
+		switch (opt) {
+		case 1:
+			cout << "Dati nr. de ingineri:"; cin >> nr;
+			for (unsigned int i = 0; i < nr; i++) {
+				cin.get();
+				cout << "Dati numele:"; getline(cin, n_i);
+				cout << "Dati prenumele:"; getline(cin, p_i);
+				cout << "Dati varsta: "; cin >> v_i;
+				cin.get();
+				cout << "Dati departamentul: ";
+				getline(cin, d_i);
+				cout << "Dati salariu: "; cin >> s_i;
+				cin.get();
+				cout << "Dati angajator:"; getline(cin, a_i);
+				cout << endl;
+				ingineri[i] = A_Inginer(n_i, p_i, v_i, d_i, s_i, a_i);
+			}
+			break;
+		case 2: for (unsigned int i = 0; i < nr; i++)
+			ingineri[i].afisare();
+			break;
+		case 3:
+			cin.get();
+			cout << "Dati numele cautat:";
+			getline(cin, num_i);
+			for (unsigned int i = 0; i < nr; i++)
+				if (num_i.compare(ingineri[i].returnareNume()) == 0)
+				{
+					cout << "\n\t\t\tAm gasit angajatul!\n\n" << endl;
+					ok = 1;
+				}
+			if (ok == 0)
+				cout << "\n\t\t\tAngajatul nu a fost gasit!\n\n";
+			break;
+		case 4:
+			cin.get();
+			cout << "Dati numele de sters:"; getline(cin, pren_i);
+			for (unsigned int i = 0; i < nr; i++)
+				if (pren_i.compare(ingineri[i].returnarePrenume()) == 0) {
+					for (unsigned int j = i; j < nr - 1; j++)
+						ingineri[j] = ingineri[j + 1];
+					nr--;
+					ok2 = 1;
+					cout << "\n\t\t\tAngajatul a fost sters din baza de date.\n\n" << endl;
+				}
+			if (ok2 == 0)
+				cout << "\n\t\t\tNu a fost gasit angajatul cu prenumele:" << pren_i<<"\n\n";
+			break;
+		case 5:
+			cout << "Dati nr. de profesori:"; cin >> nr;
+			for (unsigned int i = 0; i < nr; i++) {
+				cin.get();
+				cout << "Dati numele:"; getline(cin, n_p);
+				cout << "Dati prenumele:"; getline(cin, p_p);
+				cout << "Dati varsta: "; cin >> v_p;
+				cin.get();
+				cout << "Dati departamentul: ";
+				getline(cin, d_p);
+				cout << "Dati salariu: "; cin >> s_p;
+				cin.get();
+				cout << "Dati disciplina: "; getline(cin, dis_p);
+				cout << endl;
+				profesori[i] = A_Profesor(n_p, p_p, v_p, d_p, s_p, dis_p);
+			}
+			break;
+		case 6: for (unsigned int i = 0; i < nr; i++)
+			profesori[i].afisare();
+			break;
+		case 7:
+			cin.get();
+			cout << "Dati numele cautat:";
+			getline(cin, num_p);
+			for (unsigned int i = 0; i < nr; i++)
+				if (num_p.compare(profesori[i].returnareNume()) == 0)
+				{
+					cout << "\n\t\t\tAm gasit angajatul!\n\n" << endl;
+					ok = 1;
+				}
+			if (ok == 0)
+				cout << "\n\t\t\tAngajatul nu a fost gasit!\n\n";
+			break;
+		case 8:
+			cin.get();
+			cout << "Dati numele de sters:"; getline(cin, pren_p);
+			for (unsigned int i = 0; i < nr; i++)
+				if (pren_p.compare(profesori[i].returnarePrenume()) == 0) {
+					for (unsigned int j = i; j < nr - 1; j++)
+						profesori[j] =profesori[j + 1];
+					nr--;
+					ok2 = 1;
+					cout << "\n\t\t\tAngajatul a fost sters din baza de date.\n\n" << endl;
+				}
+			if (ok2 == 0)
+				cout << "\n\t\t\tNu a fost gasit angajatul cu prenumele:" << pren_p<<"\n\n";
+			break;
+		case 9:
+			cout << "Dati nr. de studenti licenta:"; cin >> nr;
+			for (unsigned int i = 0; i < nr; i++) {
+				cin.get();
+				cout << "Dati numele:"; getline(cin, n_s_l);
+				cout << "Dati prenumele:"; getline(cin, p_s_l);
+				cout << "Dati varsta: "; cin >> v_s_l;
+				cin.get();
+				cout << "Dati facultatea: ";
+				getline(cin, f_l);
+				cout << "Dati anul de studii: "; cin >> a_s_l;
+				cin.get();
+				cout << endl;
+				licenta[i] = S_Licenta(n_s_l, p_s_l, v_s_l, f_l, a_s_l);
+			}
+			break;
+		case 10: for (unsigned int i = 0; i < nr; i++)
+			licenta[i].afisare();
+			break;
+		case 11:
+			cin.get();
+			cout << "Dati numele cautat:";
+			getline(cin, num_s_l);
+			for (unsigned int i = 0; i < nr; i++)
+				if (num_s_l.compare(licenta[i].returnareNume()) == 0)
+				{
+					cout << "\n\t\t\tAm gasit studentul!\n\n" << endl;
+					ok = 1;
+				}
+			if (ok == 0)
+				cout << "\n\t\t\tStudentul nu a fost gasit!\n\n";
+			break;
+		case 12:
+			cin.get();
+			cout << "Dati numele de sters:"; getline(cin, pren_s_l);
+			for (unsigned int i = 0; i < nr; i++)
+				if (pren_s_l.compare(licenta[i].returnarePrenume()) == 0) {
+					for (unsigned int j = i; j < nr - 1; j++)
+						licenta[j] = licenta[j + 1];
+					nr--;
+					ok2 = 1;
+					cout << "\n\t\t\tStudentul a fost sters din baza de date.\n\n" << endl;
+				}
+			if (ok2 == 0)
+				cout << "\n\t\t\tNu a fost gasit studentul cu prenumele:" << pren_s_l << "\n\n";
+			break;
+		case 13:
+			cout << "Dati nr. de studenti master:"; cin >> nr;
+			for (unsigned int i = 0; i < nr; i++) {
+				cin.get();
+				cout << "Dati numele:"; getline(cin, n_s_m);
+				cout << "Dati prenumele:"; getline(cin, p_s_m);
+				cout << "Dati varsta: "; cin >> v_s_m;
+				cin.get();
+				cout << "Dati facultatea: ";
+				getline(cin, f_m);
+				cout << "Dati anul de studii: "; cin >> a_s_m;
+				cin.get();
+				cout << endl;
+				master[i] = S_Master(n_s_m, p_s_m, v_s_m, f_m, a_s_m);
+			}
+			break;
+		case 14: for (unsigned int i = 0; i < nr; i++)
+			master[i].afisare();
+			break;
+		case 15:
+			cin.get();
+			cout << "Dati numele cautat:";
+			getline(cin, num_s_m);
+			for (unsigned int i = 0; i < nr; i++)
+				if (num_s_m.compare(master[i].returnareNume()) == 0)
+				{
+					cout << "\n\t\t\tAm gasit studentul!\n\n" << endl;
+					ok = 1;
+				}
+			if (ok == 0)
+				cout << "\n\t\t\tStudentul nu a fost gasit!\n\n";
+			break;
+		case 16:
+			cin.get();
+			cout << "Dati numele de sters:"; getline(cin, pren_s_m);
+			for (unsigned int i = 0; i < nr; i++)
+				if (pren_s_m.compare(master[i].returnarePrenume()) == 0) {
+					for (unsigned int j = i; j < nr - 1; j++)
+						master[j] = master[j + 1];
+					nr--;
+					ok2 = 1;
+					cout << "\n\t\t\tStudentul a fost sters din baza de date.\n\n" << endl;
+				}
+			if (ok2 == 0)
+				cout << "\n\t\t\tNu a fost gasit studentul cu prenumele:" << pren_s_m << "\n\n";
+			break;
+		case 17:
+			cout << "Dati nr. de studenti doctorat:"; cin >> nr;
+			for (unsigned int i = 0; i < nr; i++) {
+				cin.get();
+				cout << "Dati numele:"; getline(cin, n_s_d);
+				cout << "Dati prenumele:"; getline(cin, p_s_d);
+				cout << "Dati varsta: "; cin >> v_s_d;
+				cin.get();
+				cout << "Dati facultatea: ";
+				getline(cin, f_d);
+				cout << "Dati anul de studii: "; cin >> a_s_d;
+				cin.get();
+				cout << endl;
+				doctorat[i] = S_Doctorat(n_s_d, p_s_d, v_s_d, f_d, a_s_d);
+			}
+			break;
+		case 18: for (unsigned int i = 0; i < nr; i++)
+			doctorat[i].afisare();
+			break;
+		case 19:
+			cin.get();
+			cout << "Dati numele cautat:";
+			getline(cin, num_s_d);
+			for (unsigned int i = 0; i < nr; i++)
+				if (num_s_d.compare(doctorat[i].returnareNume()) == 0)
+				{
+					cout << "\n\t\t\tAm gasit studentul!\n\n" << endl;
+					ok = 1;
+				}
+			if (ok == 0)
+				cout << "\n\t\t\tStudentul nu a fost gasit!\n\n";
+			break;
+		case 20:
+			cin.get();
+			cout << "Dati numele de sters:"; getline(cin, pren_s_d);
+			for (unsigned int i = 0; i < nr; i++)
+				if (pren_s_d.compare(doctorat[i].returnarePrenume()) == 0) {
+					for (unsigned int j = i; j < nr - 1; j++)
+						doctorat[j] = doctorat[j + 1];
+					nr--;
+					ok2 = 1;
+					cout << "\n\t\t\tStudentul a fost sters din baza de date.\n\n" << endl;
+				}
+			if (ok2 == 0)
+				cout << "\n\t\t\tNu a fost gasit studentul cu prenumele:" << pren_s_d << "\n\n";
+			break;
+		case 0: exit(0); break;
+		default: cout << "OPTIUNE INEXISTENTA!\n"; break;
+		}
+
+	} while (opt != 0);
+
+	_getch();
+
+	return 0;
+}
