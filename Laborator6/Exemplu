@@ -1,0 +1,185 @@
+#include<iostream>
+#include<conio.h>
+#include <string>
+using namespace std;
+
+class Lista;
+
+class Produse_Magazin {
+	int Tip_derivat;
+	string Producator, Rezolutie, Dimensiuni;
+	int Cod_produs;
+	Produse_Magazin *urm;
+public:
+	Produse_Magazin(int t, string prod, string rez, string dimens, int cod) {
+		Tip_derivat = t;
+		Producator = prod;
+		Rezolutie = rez;
+Dimensiuni = dimens;
+Cod_produs = cod;
+	}
+	virtual void afisare() {
+		cout << "____________________________________" << endl;
+		cout << "PRODUCATOR:" << Producator << endl;
+		cout << "COD PRODUS:" << Cod_produs << endl;;
+		cout << "REZOLUTIE:" << Rezolutie << endl;
+		cout << "DIMENSIUNI:" << Dimensiuni << endl;
+
+	}
+	friend class Lista;
+};
+
+class Scanere :public Produse_Magazin {
+	string Soft_inclus;
+	int Viteza_scanare;
+public:
+	Scanere(int t, string prod, string rez, string dimens, int cod, string soft, int viteza) :
+		Produse_Magazin(t, prod, rez, dimens, cod)
+	{
+		Soft_inclus = soft;
+		Viteza_scanare = viteza;
+	}
+	void afisare() {
+		Produse_Magazin::afisare();
+		cout << "SOFT INCLUS:" << Soft_inclus << endl;
+		cout << "VITEZA AFISARE:" << Viteza_scanare << endl;
+	}
+	friend class Lista;
+};
+
+class Imprimante :public Produse_Magazin {
+	string Format, Tip_af;
+public:
+	Imprimante(int t, string prod, string rez, string dimens, int cod, string form, string tip) :
+		Produse_Magazin(t, prod, rez, dimens, cod)
+	{
+		Format = form;
+		Tip_af = tip;
+	}
+	void afisare() {
+		Produse_Magazin::afisare();
+		cout << "FORMAT:" << Format << endl;
+		cout << "TIP AFISARE:" << Tip_af << endl;
+	}
+	friend class Lista;
+};
+
+class Lista {
+public:
+	Produse_Magazin *head;
+	void adaugare(Produse_Magazin *prod);
+	void afisare_lista();
+};
+
+void Lista::adaugare(Produse_Magazin *a) {
+	Produse_Magazin *p;
+	p = head;
+	if (p) {
+		if (a->Producator < p->Producator) {
+			a->urm = head;
+			head = a;
+		}
+		else {
+			while (p->urm&&p->urm->Producator < a->Producator)
+				p = p->urm;
+			a->urm = p->urm;
+			p->urm = a;
+		}
+	}
+	else
+		head = a;
+}
+
+void Lista::afisare_lista() {
+	Produse_Magazin *a;
+	a = head;
+	if (!a)
+		cout << "Lista este vida!\n";
+	else
+		while (a) {
+			a->afisare();
+			a = a->urm;
+			//_getch();
+		}
+}
+
+class Supraincarcare {
+	string producator, rezolutie, dimensiuni;
+	int cod_produs;
+public:
+	friend ostream&operator<<(ostream &out, Supraincarcare &a);
+	friend istream&operator>>(istream&in, Supraincarcare &a);
+	string Producator() { return producator; }
+	string Rezolutie() { return rezolutie; }
+	string Dimensiuni() { return dimensiuni; }
+	int Cod_produs() { return cod_produs; }
+};
+
+ostream & operator<<(ostream & out, Supraincarcare &a){
+	cout << "Vom citi datele pentru scanere si imprimante.\n";
+	cout << endl;
+	return out;
+}
+
+istream &operator>>(istream&in, Supraincarcare &a) {
+	cin.get();
+	cout << "Dati producatorul:"; getline(cin, a.producator);
+	cout << "Dati rezolutia:"; getline(cin, a.rezolutie);
+	cout << "Dati dimensiuni:"; getline(cin, a.dimensiuni);
+	cout << "Dati cod produs:"; cin >> a.cod_produs;
+	return in;
+}
+
+void introducere(Lista &l, int x) {
+	int Tip_derivat;
+	string Soft_inclus, Format, Tip;
+	int Viteza_scanare;
+	Produse_Magazin *prod_mag;
+	Supraincarcare supr;
+	cout << supr;
+	cin >> supr;
+	if (x == 0) {
+		Scanere *Sc;
+		cin.get();
+		cout << "Introduceti softul inclus:"; getline(cin, Soft_inclus);
+		cout << "Introduceti viteza de scanare:"; cin >> Viteza_scanare;
+		Sc = new Scanere(1, supr.Producator(), supr.Rezolutie(), supr.Dimensiuni(), supr.Cod_produs(), Soft_inclus, Viteza_scanare);
+		prod_mag = Sc;
+		l.adaugare(prod_mag);
+	}
+	else if (x == 1) {
+		Imprimante *Im;
+		cin.get();
+		cout << "Introduceti formatul imprimantei:"; getline(cin, Format);
+		cout << "Introduceti Tipul imprimantei:"; getline(cin, Tip);
+		Im = new Imprimante(2, supr.Producator(), supr.Rezolutie(), supr.Dimensiuni(), supr.Cod_produs(), Format, Tip);
+		prod_mag = Im;
+		l.adaugare(prod_mag);
+	}
+}
+
+void main() {
+	int opt;
+	Lista l;
+	l.head = NULL;
+	do {
+		cout << "1.Adaugare scanere in lista ordonat dupa producator." << endl;
+		cout<<"2.Adaugare imprimante in lista ordonat dupa producator." << endl;
+		cout << "3.Afisare articole magazin." << endl;
+		cout << "0.Iesire" << endl;
+		cout << "Dati optiune:";
+		cin >> opt;
+		switch (opt)
+		{
+
+		case 1:introducere(l, 0); break;
+		case 2:introducere(l, 1); break;
+		case 3:l.afisare_lista(); break;
+		case 0:exit(0); break;
+		default:cout << "Optiune gresita!\n";
+			break;
+		}
+	} while (opt != 0);
+		
+	system("pause");
+}
