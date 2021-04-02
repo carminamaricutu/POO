@@ -1,0 +1,41 @@
+#include <iostream>
+#include <conio.h>
+using namespace std;
+
+class Dreptunghi {
+	int *latime, *lungime;
+public:
+	Dreptunghi(int, int); //Constructor
+	~Dreptunghi(); //Destructor
+	int calcul_arie(void) {
+		return(*latime * *lungime);
+	}
+};
+
+//Constructor
+Dreptunghi::Dreptunghi(int a, int b) {
+	latime = new int;
+	lungime = new int;
+	*latime = a;
+	*lungime = b;
+}
+
+//Destructor
+Dreptunghi::~Dreptunghi() {
+	delete latime;
+	delete lungime;
+	printf("\nAm eliberat memoria!\n");
+}
+
+int main() {
+	Dreptunghi dreptA(3, 5), dreptB(6, 7);
+
+	cout << "Aria primului dreptunghi este: " << dreptA.calcul_arie() << endl;
+	cout << "Aria celui de-al doilea dreptunghi este: " << dreptB.calcul_arie() << endl;
+	
+	dreptA.~Dreptunghi();
+	dreptB.~Dreptunghi();
+
+	_getch();
+	return 0;
+}
