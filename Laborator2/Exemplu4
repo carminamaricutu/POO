@@ -1,0 +1,52 @@
+#include <iostream>
+#include <conio.h>
+using namespace std;
+
+class Student {
+	char nume[20], prenume[20];
+	int grupa, cod_postal;
+	public:
+		Student(); //Constructor
+		~Student(); //Destructor
+		void citire_date();
+		void afisare_date();
+};
+
+//Constructor
+Student::Student(){
+	cout << "Constructor:Informatiile studentului sunt: " << endl;
+}
+
+//Citire informatii
+void Student::citire_date() {
+	cout << "Nume: "; cin >> nume;
+	cout << "Prenume: "; cin >> prenume;
+	cout << "Grupe: "; cin >> grupa;
+	cout << "Cod postal: "; cin >> cod_postal;
+}
+//Afisare informatii
+void Student::afisare_date() {
+	cout << "NUME: " << nume << endl;
+	cout << "PRENUME: " << prenume << endl;
+	cout << "GRUPA: " << grupa << endl;
+	cout << "COD POSTAL: " << cod_postal << endl << endl;
+}
+//Destructor
+Student::~Student() {
+	cout << "Destructor:Eliberare memorie! "<<endl;
+}
+
+int main() {
+	Student s,p;
+
+	s.citire_date();
+	s.afisare_date();
+	s.~Student();
+	
+	p.citire_date();
+	p.afisare_date();
+	p.~Student();
+
+	_getch();
+	return 0;
+}
