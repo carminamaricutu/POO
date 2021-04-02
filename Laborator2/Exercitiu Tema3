@@ -1,0 +1,34 @@
+#include <iostream>
+#include <conio.h>
+using namespace std;
+
+class Profesor{
+	char nume[20], departament[10], grad_didactic[20];
+	int vechime;
+public:
+	void citire_info();
+	void afisare_info();
+};
+void Profesor::citire_info()
+{
+	cout << "Nume: "; cin >> nume;
+	cout << "Departament: "; cin >> departament;
+	cout << "Grad didactic: "; cin >> grad_didactic;
+	cout << "Vechime: "; cin >> vechime;
+}
+
+void Profesor::afisare_info() {
+	cout << "Nume: "<< nume<<endl;
+	cout << "Departament: " << departament << endl;
+	cout << "Grad didactic: "<< grad_didactic<<endl;
+	cout << "Vechime: "<< vechime<<endl;
+}
+int main() {
+
+	Profesor p1;
+	p1.citire_info();
+	p1.afisare_info();
+
+	_getch();
+	return 0;
+}
