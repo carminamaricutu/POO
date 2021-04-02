@@ -1,0 +1,118 @@
+#include <iostream>
+#include <conio.h>
+#include <string>
+using namespace std;
+
+class Persoana {
+	string nume, prenume;
+	unsigned int varsta;
+public:
+	Persoana() {}
+	Persoana(string nume, string prenume, unsigned int varsta) {
+		Persoana::nume = nume;
+		Persoana::prenume = prenume;
+		Persoana::varsta = varsta;
+	}
+	void afisare() {
+		cout << "---------------------------------" << endl;
+		cout << "NUMELE:" << nume << endl;
+		cout << "PRENUME:" << prenume << endl;
+		cout << "VARSTA:" << varsta << endl;
+
+	}
+	string returnareNume() {
+		return Persoana::nume;
+	}
+	string returnarePrenume() {
+		return Persoana::prenume;
+	}
+};
+
+class Angajat :public Persoana {
+	unsigned int salar;
+	string departament;
+public:
+	Angajat() {};
+	Angajat(string nume, string prenume, unsigned int varsta, string departament, unsigned int salar) :Persoana(nume, prenume, varsta) {
+		Angajat::departament = departament;
+		Angajat::salar = salar;
+	}
+	void afisare() {
+		Persoana::afisare();
+		cout << "DEPARTAMENT: " << Angajat::departament << endl;
+		cout << "SALAR: " << Angajat::salar << endl;
+		cout << "---------------------------------" << endl;
+	}
+};
+
+int main() {
+	
+	string n, p, d, num;
+	string pren;
+	int v, s, ok = 0, ok2/*Pentru cautare*/;
+	Angajat angajati[20];
+	unsigned int nr;
+	int opt;
+	do {
+		cout << "1.Introducere angajati.\n";
+		cout << "2.Afisare angajati.\n";
+		cout << "3.Cautare angajati.\n";
+		cout << "4.Stergere angajati.\n";
+		cout << "0.Iesire.\n";
+		cout << "Optiunea dorita:"; cin >> opt;
+		switch (opt) {
+		case 1:
+			cout << "Dati nr de angajati:"; cin >> nr;
+			for (unsigned int i = 0; i < nr; i++) {
+				cin.get();
+				cout << "Dati numele:"; getline(cin, n);
+				cout << "Dati prenumele:"; getline(cin, p);
+				cout << "Dati varsta: "; cin >> v;
+				cin.get();
+				cout << "Dati departamentul: ";
+				getline(cin, d);
+				cout << "Dati salariu: "; cin >> s;
+				cout << endl;
+				angajati[i] = Angajat(n, p, v, d, s);
+			}
+		break;
+		case 2: for (unsigned int i = 0; i < nr; i++)
+			angajati[i].afisare();
+			break;
+		case 3:
+			cin.get();
+			cout << "Dati numele cautat:";
+			getline(cin, num);
+			for(unsigned int i=0; i<nr;i++)
+				if (num.compare(angajati[i].returnareNume()) == 0)
+				{
+					cout << "Am gasit angajatul!" << endl;
+					ok = 1;
+				}
+			if (ok == 0)
+				cout << "Angajatul nu a fost gasit!\n";
+			break;
+		case 4:
+			cin.get();
+			cout<<"Dati numele de sters:" ; getline(cin, pren);
+			for(unsigned int i=0;i<nr;i++)
+				if (pren.compare(angajati[i].returnarePrenume()) == 0) {
+					for (unsigned int j = i; j < nr - 1; j++)
+						angajati[j] = angajati[j + 1];
+					nr--;
+					ok2 = 1;
+					cout << "Angajatul a fost sters din baza de date." << endl;
+				}
+			if (ok2 == 0)
+				cout << "Nu a fost gasit angajatul cu prenumele:" << pren;
+			break;
+		case 0: exit(0); break;
+		default: cout << "Optiune inexistenta!\n"; break;
+		}
+		
+	} while (opt != 0);
+
+	_getch();
+
+	return 0;
+}
