@@ -1,0 +1,41 @@
+#include <iostream>
+#include <conio.h>
+using namespace std;
+
+class Dreptunghi {
+	int latime, lungime;
+	public:
+		void setare_valori(int, int);
+		int aria(void) {
+			return (latime*lungime);
+		}
+};
+
+void Dreptunghi::setare_valori(int a, int b) {
+	latime = a;
+	lungime = b;
+
+}
+
+int main() {
+	Dreptunghi a, *b, *c;
+	Dreptunghi *d = new Dreptunghi[2];
+
+	a.setare_valori(1, 2);
+	c = &a;
+	b = new Dreptunghi;
+	b->setare_valori(3, 4);
+	d->setare_valori(5, 6);
+	d[1].setare_valori(7, 8);
+
+	//Afisare arii
+	cout << "a aria: " << a.aria() << endl;
+	cout << "*b aria: " << b->aria() << endl;
+	cout << "*c aria: " << c->aria() << endl;
+	cout << "d[0] aria: " << d[0].aria() << endl;
+	cout << "d[1] aria:" << d[1].aria() << endl;
+
+	_getch();
+	return 0;
+
+}
