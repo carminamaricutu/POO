@@ -1,0 +1,56 @@
+#include <iostream>
+#include <conio.h>
+#include <string>
+
+using namespace std;
+
+class Persoana {
+	string nume, prenume;
+	unsigned int varsta;
+public:
+	Persoana() {
+		nume = "Popescu";
+		prenume = "Ionescu";
+		varsta = 44;
+	}
+	Persoana(string n, string p, int);
+	void afisare_date() {
+		cout << "Nume:" << nume << endl;
+		cout << "Prenume:" << prenume << endl;
+		cout << "Varsta:" << varsta << endl;
+	}
+};
+
+Persoana::Persoana(string n, string p, int v) {
+	nume = n;
+	prenume = p;
+	varsta = v;
+}
+
+int main() {
+	string nume;
+	string prenume;
+	int varsta;
+
+	cout << "Nume:"; getline(cin, nume);
+	cout << "Prenume:"; getline(cin, prenume);
+	cout << "Varsta:"; cin >> varsta;
+
+	Persoana p(nume, prenume, varsta);
+	p.afisare_date();
+
+	Persoana p1("Popescu", "Maria", 33);
+	Persoana p2("Ionescu", "Marin", 37);
+	Persoana p3("Gheorghiu", "Adela", 55);
+
+	p1.afisare_date();
+	p2.afisare_date();
+	p3.afisare_date();
+
+	Persoana p4;
+	p4.afisare_date();
+	_getch();
+	return 0;
+
+
+}
